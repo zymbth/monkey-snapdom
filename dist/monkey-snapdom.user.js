@@ -6,6 +6,7 @@
 // @description  使用SnapDOM实现的网页截图工具
 // @license      MIT
 // @match        *
+// @require      https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js
 // @grant        GM_addStyle
 // ==/UserScript==
 
