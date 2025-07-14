@@ -1,0 +1,28 @@
+{
+  "name": "monkey-snapdom",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "author": {
+    "name": "ymzhao",
+    "email": "ymzhaobth@gmail.com"
+  },
+  "description": "使用SnapDOM实现的网页截图工具",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.5",
+    "vite-plugin-monkey": "^5.0.3"
+  },
+  "volta": {
+    "node": "20.17.0",
+    "pnpm": "10.12.4"
+  },
+  "dependencies": {
+    "@zumer/snapdom": "^1.9.5"
+  }
+}
