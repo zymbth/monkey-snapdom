@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         网页元素截图
 // @namespace
-// @version      0.0.3
+// @version      0.0.4
 // @author       ymzhao
 // @description  使用SnapDOM实现的网页截图工具
 // @license      MIT
@@ -48,20 +48,18 @@
   let hoverEl = null;
   let isChosing = false;
   let loading = false;
-  window.onload = function() {
-    GM_registerMenuCommand("选中并截图", function(e) {
-      if (isChosing || loading) return;
-      isChosing = true;
-      document.body.addEventListener("mousemove", handleMousemove);
-      setTimeout(() => {
-        document.body.addEventListener("click", handleConfirmTarget);
-      }, 200);
-    }, {
-      accessKey: "s",
-      autoClose: true,
-      title: "点击后，可选中网页元素以截图"
-    });
-  };
+  GM_registerMenuCommand("选中并截图", function(e) {
+    if (isChosing || loading) return;
+    isChosing = true;
+    document.body.addEventListener("mousemove", handleMousemove);
+    setTimeout(() => {
+      document.body.addEventListener("click", handleConfirmTarget);
+    }, 200);
+  }, {
+    accessKey: "s",
+    autoClose: true,
+    title: "点击后，可选中网页元素以截图"
+  });
   function handleMousemove(e) {
     if (!isChosing || !e.target) return;
     if (hoverEl) hoverEl.classList.remove("snap-target");

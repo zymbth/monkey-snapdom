@@ -15,20 +15,19 @@ let isChosing = false
 let loading = false
 const TIMEOUT = 1000 * 60
 
-window.onload = function () {
-  const menu_command_id_1 = GM_registerMenuCommand('选中并截图', function (e) {
-    if (isChosing || loading) return
-    isChosing = true
-    document.body.addEventListener('mousemove', handleMousemove)
-    setTimeout(() => {
-      document.body.addEventListener('click', handleConfirmTarget)
-    }, 200)
-  }, {
-    accessKey: 's',
-    autoClose: true,
-    title: '点击后，可选中网页元素以截图'
-  });
-}
+// window.onload = function () {}
+const menu_command_id_1 = GM_registerMenuCommand('选中并截图', function (e) {
+  if (isChosing || loading) return
+  isChosing = true
+  document.body.addEventListener('mousemove', handleMousemove)
+  setTimeout(() => {
+    document.body.addEventListener('click', handleConfirmTarget)
+  }, 200)
+}, {
+  accessKey: 's',
+  autoClose: true,
+  title: '点击后，可选中网页元素以截图'
+});
 
 
 function handleMousemove(e) {
