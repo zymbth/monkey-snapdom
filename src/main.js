@@ -1,4 +1,4 @@
-import './style.css'
+// import './style.css'
 import { manualDelay, shining } from './utils.js'
 // import { snapdom } from '@zumer/snapdom'
 
@@ -15,20 +15,21 @@ let isChosing = false
 let loading = false
 const TIMEOUT = 1000 * 60
 
-window.onload = function() {
-  const startEl = document.createElement('a')
-  startEl.id = 'snap-dom'
-  startEl.innerText = '截'
-  startEl.addEventListener('click', async () => {
-    if(isChosing || loading) return
+window.onload = function () {
+  const menu_command_id_1 = GM_registerMenuCommand('选中并截图', function (e) {
+    if (isChosing || loading) return
     isChosing = true
     document.body.addEventListener('mousemove', handleMousemove)
     setTimeout(() => {
       document.body.addEventListener('click', handleConfirmTarget)
     }, 200)
-  })
-  document.body.append(startEl)
+  }, {
+    accessKey: 's',
+    autoClose: true,
+    title: '点击后，可选中网页元素以截图'
+  });
 }
+
 
 function handleMousemove(e) {
   if(!isChosing || !e.target) return
@@ -48,8 +49,6 @@ async function handleConfirmTarget(e) {
   hoverEl.classList.remove('snap-target')
   // 下载
   loading = true
-  const startEl = document.getElementById('snap-dom')
-  startEl.classList.add('loading')
   await manualDelay(50)
   try {
     await execSnapDom(hoverEl)
@@ -59,7 +58,6 @@ async function handleConfirmTarget(e) {
     console.error(err)
   }
   loading = false
-  startEl.classList.remove('loading')
   hoverEl = null
 }
 

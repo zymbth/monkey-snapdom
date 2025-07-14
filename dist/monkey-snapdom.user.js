@@ -1,16 +1,14 @@
 // ==UserScript==
 // @name         网页元素截图
 // @namespace
-// @version      0.0.2
+// @version      0.0.3
 // @author       ymzhao
 // @description  使用SnapDOM实现的网页截图工具
 // @license      MIT
 // @match        *
 // @require      https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js
-// @grant        GM_addStyle
+// @grant        GM_registerMenuCommand
 // ==/UserScript==
-
-GM_addStyle(" :root{--snap-theme-color: #fff;--snap-txt-color: #000;--snap-shadow-color: #0003}#snap-dom{position:fixed;bottom:15px;right:15px;display:flex;justify-content:center;align-items:center;font-size:12px;color:var(--snap-txt-color);height:30px;width:30px;background-color:var(--snap-theme-color);border-radius:50%;box-shadow:0 0 4px 2px var(--snap-shadow-color);text-decoration:none;cursor:pointer;z-index:3000}#snap-dom.loading{color:transparent}#snap-dom.loading:before{--g: no-repeat radial-gradient(circle closest-side,var(--snap-txt-color) 90%,transparent);content:\"\";position:absolute;top:0;left:0;bottom:0;right:0;background:var(--g) 0% 50%,var(--g) 50% 50%,var(--g) 100% 50%;background-size:calc(100%/3) 50%;animation:l3 1s infinite linear;cursor:wait}.snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green!important}@keyframes l3{20%{background-position:0% 0%,50% 50%,100% 50%}40%{background-position:0% 100%,50% 0%,100% 50%}60%{background-position:0% 50%,50% 100%,100% 0%}80%{background-position:0% 50%,50% 50%,100% 100%}}@media (prefers-color-scheme: dark){:root{--snap-theme-color: #1b2832;--snap-txt-color: #ddd;--snap-shadow-color: #ddd3}} ");
 
 (function () {
   'use strict';
@@ -51,18 +49,18 @@ GM_addStyle(" :root{--snap-theme-color: #fff;--snap-txt-color: #000;--snap-shado
   let isChosing = false;
   let loading = false;
   window.onload = function() {
-    const startEl = document.createElement("a");
-    startEl.id = "snap-dom";
-    startEl.innerText = "截";
-    startEl.addEventListener("click", async () => {
+    GM_registerMenuCommand("选中并截图", function(e) {
       if (isChosing || loading) return;
       isChosing = true;
       document.body.addEventListener("mousemove", handleMousemove);
       setTimeout(() => {
         document.body.addEventListener("click", handleConfirmTarget);
       }, 200);
+    }, {
+      accessKey: "s",
+      autoClose: true,
+      title: "点击后，可选中网页元素以截图"
     });
-    document.body.append(startEl);
   };
   function handleMousemove(e) {
     if (!isChosing || !e.target) return;
@@ -80,8 +78,6 @@ GM_addStyle(" :root{--snap-theme-color: #fff;--snap-txt-color: #000;--snap-shado
     }
     hoverEl.classList.remove("snap-target");
     loading = true;
-    const startEl = document.getElementById("snap-dom");
-    startEl.classList.add("loading");
     await manualDelay(50);
     try {
       await execSnapDom(hoverEl);
@@ -91,7 +87,6 @@ GM_addStyle(" :root{--snap-theme-color: #fff;--snap-txt-color: #000;--snap-shado
       console.error(err);
     }
     loading = false;
-    startEl.classList.remove("loading");
     hoverEl = null;
   }
   async function execSnapDom(targetEl) {
