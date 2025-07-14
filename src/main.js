@@ -1,6 +1,6 @@
 import './style.css'
 import { manualDelay, shining } from './utils.js'
-import { snapdom } from '@zumer/snapdom'
+// import { snapdom } from '@zumer/snapdom'
 
 /**
  * 网页截图插件

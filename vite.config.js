@@ -17,7 +17,7 @@ export default defineConfig({
         },
         cssSideEffects: (css) => {
           const t = JSON.stringify(css)
-          return `GM_addStyle(${t})`
+          return `GM_addStyle(${t});`
         }
       }
     }),
