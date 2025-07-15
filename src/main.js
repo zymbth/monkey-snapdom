@@ -13,9 +13,12 @@ import { manualDelay, shining } from './utils.js'
 let hoverEl = null
 let isChosing = false
 let loading = false
+// @ts-ignore
 const TIMEOUT = 1000 * 60
 
 // 菜单
+// @ts-ignore
+// @ts-ignore
 const menu_command_id_1 = GM_registerMenuCommand('选中并截图', function (e) {
   if (isChosing || loading) return
   isChosing = true
@@ -38,6 +41,7 @@ function handleMousemove(e) {
   hoverEl = e.target
 }
 // 点击确认选中
+// @ts-ignore
 async function handleConfirmTarget(e) {
   isChosing = false
   document.body.removeEventListener('mousemove', handleMousemove)
@@ -77,6 +81,7 @@ function handleKeydown(e) {
 
 // 指定DOM元素，下载其内容
 async function execSnapDom(targetEl) {
+  // @ts-ignore
   if(!snapdom) {
     console.error('未加载插件snapdom')
     return
@@ -86,6 +91,7 @@ async function execSnapDom(targetEl) {
     return
   }
   console.time('捕获耗时：')
+  // @ts-ignore
   const capture = await snapdom(targetEl, {
     embedFonts: true,
     compress: true
