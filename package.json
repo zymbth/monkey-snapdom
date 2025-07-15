@@ -1,13 +1,13 @@
 {
   "name": "monkey-snapdom",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.1",
   "type": "module",
   "author": {
     "name": "ymzhao",
     "email": "ymzhaobth@gmail.com"
   },
-  "description": "使用SnapDOM实现的网页DOM捕获截图工具",
+  "description": "使用SnapDOM实现的网页DOM捕获截图插件",
   "license": "MIT",
   "scripts": {
     "dev": "vite",

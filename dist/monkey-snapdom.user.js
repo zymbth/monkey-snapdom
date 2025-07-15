@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         网页DOM捕获截图
 // @namespace
-// @version      0.0.5
+// @version      0.0.1
 // @author       ymzhao
-// @description  使用SnapDOM实现的网页DOM捕获截图工具
+// @description  使用SnapDOM实现的网页DOM捕获截图插件
 // @license      MIT
 // @match        *
 // @require      https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js
