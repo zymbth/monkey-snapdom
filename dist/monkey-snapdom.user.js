@@ -1,14 +1,17 @@
 // ==UserScript==
-// @name         网页元素截图
+// @name         网页DOM捕获截图
 // @namespace
-// @version      0.0.4
+// @version      0.0.5
 // @author       ymzhao
-// @description  使用SnapDOM实现的网页截图工具
+// @description  使用SnapDOM实现的网页DOM捕获截图工具
 // @license      MIT
 // @match        *
 // @require      https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js
+// @grant        GM_addStyle
 // @grant        GM_registerMenuCommand
 // ==/UserScript==
+
+GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green!important} ");
 
 (function () {
   'use strict';

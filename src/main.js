@@ -1,4 +1,4 @@
-// import './style.css'
+import './styles/index.css'
 import { manualDelay, shining } from './utils.js'
 // import { snapdom } from '@zumer/snapdom'
 

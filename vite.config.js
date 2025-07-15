@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import monkey, { cdn } from 'vite-plugin-monkey';
+import monkey/* , { cdn } */ from 'vite-plugin-monkey';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,7 +7,7 @@ export default defineConfig({
     monkey({
       entry: 'src/main.js',
       userscript: {
-        name: '网页元素截图',
+        name: '网页DOM捕获截图',
         namespace: '',
         match: ['*'],
         require: ['https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js']
