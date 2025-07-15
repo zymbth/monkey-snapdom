@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         网页DOM捕获截图
 // @namespace
-// @version      0.0.5
+// @version      0.0.6
 // @author       ymzhao
 // @description  使用SnapDOM实现的网页DOM捕获截图插件
 // @license      MIT
+// @include      *
 // @match        *
 // @require      https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js
 // @grant        GM_addStyle
@@ -57,6 +58,7 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
     document.body.addEventListener("mousemove", handleMousemove);
     setTimeout(() => {
       document.body.addEventListener("click", handleConfirmTarget);
+      document.body.addEventListener("keydown", handleKeydown);
     }, 200);
   }, {
     accessKey: "s",
@@ -73,6 +75,7 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
     isChosing = false;
     document.body.removeEventListener("mousemove", handleMousemove);
     document.body.removeEventListener("click", handleConfirmTarget);
+    document.body.removeEventListener("keydown", handleKeydown);
     if (!hoverEl) {
       shining("未选中目标", "orange");
       return;
@@ -89,6 +92,17 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
     }
     loading = false;
     hoverEl = null;
+  }
+  function handleKeydown(e) {
+    if (e.keyCode !== 27) return;
+    isChosing = false;
+    document.body.removeEventListener("mousemove", handleMousemove);
+    document.body.removeEventListener("click", handleConfirmTarget);
+    document.body.removeEventListener("keydown", handleKeydown);
+    if (hoverEl) {
+      hoverEl.classList.remove("snap-target");
+      hoverEl = null;
+    }
   }
   async function execSnapDom(targetEl) {
     if (!snapdom) {

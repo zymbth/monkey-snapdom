@@ -15,13 +15,14 @@ let isChosing = false
 let loading = false
 const TIMEOUT = 1000 * 60
 
-// window.onload = function () {}
+// 菜单
 const menu_command_id_1 = GM_registerMenuCommand('选中并截图', function (e) {
   if (isChosing || loading) return
   isChosing = true
   document.body.addEventListener('mousemove', handleMousemove)
   setTimeout(() => {
     document.body.addEventListener('click', handleConfirmTarget)
+    document.body.addEventListener('keydown', handleKeydown)
   }, 200)
 }, {
   accessKey: 's',
@@ -29,17 +30,19 @@ const menu_command_id_1 = GM_registerMenuCommand('选中并截图', function (e)
   title: '点击后，可选中网页元素以截图'
 });
 
-
+// 鼠标移动
 function handleMousemove(e) {
   if(!isChosing || !e.target) return
   if(hoverEl) hoverEl.classList.remove('snap-target')
   e.target.classList.add('snap-target')
   hoverEl = e.target
 }
+// 点击确认选中
 async function handleConfirmTarget(e) {
   isChosing = false
   document.body.removeEventListener('mousemove', handleMousemove)
   document.body.removeEventListener('click', handleConfirmTarget)
+  document.body.removeEventListener('keydown', handleKeydown)
 
   if(!hoverEl) {
     shining('未选中目标', 'orange')
@@ -58,6 +61,18 @@ async function handleConfirmTarget(e) {
   }
   loading = false
   hoverEl = null
+}
+// ESC取消选中
+function handleKeydown(e) {
+  if(e.keyCode !== 27) return
+  isChosing = false
+  document.body.removeEventListener('mousemove', handleMousemove)
+  document.body.removeEventListener('click', handleConfirmTarget)
+  document.body.removeEventListener('keydown', handleKeydown)
+  if(hoverEl) {
+    hoverEl.classList.remove('snap-target')
+    hoverEl = null
+  }
 }
 
 // 指定DOM元素，下载其内容

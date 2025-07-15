@@ -10,6 +10,7 @@ export default defineConfig({
         name: '网页DOM捕获截图',
         namespace: '',
         match: ['*'],
+        include: ['*'],
         require: ['https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js']
       },
       build: {
