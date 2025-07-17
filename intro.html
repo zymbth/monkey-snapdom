@@ -9,7 +9,7 @@
     <div id="content"></div>
   </body>
   <script type="module">
-    fetch('../README.md')
+    fetch('/README.md')
       .then((res) => res.text())
       .then((text) => {
         const intro = marked.parse(text)
