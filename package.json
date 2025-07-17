@@ -16,8 +16,8 @@
   },
   "devDependencies": {
     "@zumer/snapdom": "^1.9.5",
-    "vite": "^6.0.5",
-    "vite-plugin-monkey": "^5.0.3"
+    "vite": "^6.3.5",
+    "vite-plugin-monkey": "^5.0.9"
   },
   "volta": {
     "node": "20.17.0",

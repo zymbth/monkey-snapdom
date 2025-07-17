@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+  </head>
+  <body>
+    <div id="content"></div>
+  </body>
+  <script type="module">
+    fetch('/README.md')
+      .then((res) => res.text())
+      .then((text) => {
+        const intro = marked.parse(text)
+        document.getElementById('content').innerHTML = intro
+      })
+      .catch(err => {
+        console.error(err)
+        document.getElementById('content').innerHTML = '加载失败'
+      })
+  </script>
+</html>
