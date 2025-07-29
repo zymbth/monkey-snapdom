@@ -16,22 +16,53 @@ let loading = false
 // @ts-ignore
 const TIMEOUT = 1000 * 60
 
-// 菜单
-// @ts-ignore
-// @ts-ignore
-const menu_command_id_1 = GM_registerMenuCommand('选中并截图', function (e) {
-  if (isChosing || loading) return
+try {
+  // 菜单
+  // @ts-ignore
+  const menu_command_id_1 = GM_registerMenuCommand(
+    '选中并截图',
+    function (e) {
+      startChosing()
+    },
+    {
+      accessKey: 's',
+      autoClose: true,
+      title: '点击后，可选中网页元素以截图'
+    }
+  )
+} catch (error) {}
+
+// 监听全局快捷键: Ctrl+Shift+,
+window.onload = function () {
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && (e.key === ',' || e.key === '<')) {
+      e.preventDefault()
+      startChosing()
+    }
+  })
+}
+
+// 开启功能
+function startChosing() {
+  if(isChosing || loading) {
+    console.warn('正在选中，已重新开始')
+    stopChosing()
+  }
   isChosing = true
   document.body.addEventListener('mousemove', handleMousemove)
   setTimeout(() => {
     document.body.addEventListener('click', handleConfirmTarget)
     document.body.addEventListener('keydown', handleKeydown)
   }, 200)
-}, {
-  accessKey: 's',
-  autoClose: true,
-  title: '点击后，可选中网页元素以截图'
-});
+}
+
+// 关闭功能
+function stopChosing() {
+  isChosing = false
+  document.body.removeEventListener('mousemove', handleMousemove)
+  document.body.removeEventListener('click', handleConfirmTarget)
+  document.body.removeEventListener('keydown', handleKeydown)
+}
 
 // 鼠标移动
 function handleMousemove(e) {
@@ -40,13 +71,11 @@ function handleMousemove(e) {
   e.target.classList.add('snap-target')
   hoverEl = e.target
 }
+
 // 点击确认选中
 // @ts-ignore
 async function handleConfirmTarget(e) {
-  isChosing = false
-  document.body.removeEventListener('mousemove', handleMousemove)
-  document.body.removeEventListener('click', handleConfirmTarget)
-  document.body.removeEventListener('keydown', handleKeydown)
+  stopChosing()
 
   if(!hoverEl) {
     shining('未选中目标', 'orange')
@@ -66,6 +95,7 @@ async function handleConfirmTarget(e) {
   loading = false
   hoverEl = null
 }
+
 // ESC取消选中
 function handleKeydown(e) {
   if(e.keyCode !== 27) return

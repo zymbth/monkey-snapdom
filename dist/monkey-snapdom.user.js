@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         网页DOM捕获截图
 // @namespace
-// @version      0.0.8
+// @version      0.0.9
 // @author       ymzhao
 // @description  使用SnapDOM实现的网页DOM捕获截图插件
 // @license      MIT
@@ -53,19 +53,46 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
   let hoverEl = null;
   let isChosing = false;
   let loading = false;
-  GM_registerMenuCommand("选中并截图", function(e) {
-    if (isChosing || loading) return;
+  try {
+    const menu_command_id_1 = GM_registerMenuCommand(
+      "选中并截图",
+      function(e) {
+        startChosing();
+      },
+      {
+        accessKey: "s",
+        autoClose: true,
+        title: "点击后，可选中网页元素以截图"
+      }
+    );
+  } catch (error) {
+  }
+  window.onload = function() {
+    document.addEventListener("keydown", function(e) {
+      if (e.ctrlKey && e.shiftKey && (e.key === "," || e.key === "<")) {
+        e.preventDefault();
+        startChosing();
+      }
+    });
+  };
+  function startChosing() {
+    if (isChosing || loading) {
+      console.warn("正在选中，已重新开始");
+      stopChosing();
+    }
     isChosing = true;
     document.body.addEventListener("mousemove", handleMousemove);
     setTimeout(() => {
       document.body.addEventListener("click", handleConfirmTarget);
       document.body.addEventListener("keydown", handleKeydown);
     }, 200);
-  }, {
-    accessKey: "s",
-    autoClose: true,
-    title: "点击后，可选中网页元素以截图"
-  });
+  }
+  function stopChosing() {
+    isChosing = false;
+    document.body.removeEventListener("mousemove", handleMousemove);
+    document.body.removeEventListener("click", handleConfirmTarget);
+    document.body.removeEventListener("keydown", handleKeydown);
+  }
   function handleMousemove(e) {
     if (!isChosing || !e.target) return;
     if (hoverEl) hoverEl.classList.remove("snap-target");
@@ -73,10 +100,7 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
     hoverEl = e.target;
   }
   async function handleConfirmTarget(e) {
-    isChosing = false;
-    document.body.removeEventListener("mousemove", handleMousemove);
-    document.body.removeEventListener("click", handleConfirmTarget);
-    document.body.removeEventListener("keydown", handleKeydown);
+    stopChosing();
     if (!hoverEl) {
       shining("未选中目标", "orange");
       return;
