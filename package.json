@@ -12,13 +12,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "docs": "vite build --config docs/intro.config.js --base=/monkey-snapdom/",
-    "docs:preview": "vite preview --config docs/intro.config.js --base=/monkey-snapdom/ --port 3001"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@zumer/snapdom": "^1.9.5",
-    "marked": "^16.0.0",
     "vite": "^6.3.5",
     "vite-plugin-monkey": "^5.0.9"
   },
