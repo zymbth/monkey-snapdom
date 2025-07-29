@@ -21,9 +21,7 @@ try {
   // @ts-ignore
   const menu_command_id_1 = GM_registerMenuCommand(
     '选中并截图',
-    function (e) {
-      startChosing()
-    },
+    startChosing,
     {
       accessKey: 's',
       autoClose: true,
@@ -37,7 +35,8 @@ window.onload = function () {
   document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.shiftKey && (e.key === ',' || e.key === '<')) {
       e.preventDefault()
-      startChosing()
+      if (isChosing) stopChosing()
+      else startChosing()
     }
   })
 }
@@ -52,7 +51,7 @@ function startChosing() {
   document.body.addEventListener('mousemove', handleMousemove)
   setTimeout(() => {
     document.body.addEventListener('click', handleConfirmTarget)
-    document.body.addEventListener('keydown', handleKeydown)
+    document.body.addEventListener('keydown', handleEsc)
   }, 200)
 }
 
@@ -61,7 +60,11 @@ function stopChosing() {
   isChosing = false
   document.body.removeEventListener('mousemove', handleMousemove)
   document.body.removeEventListener('click', handleConfirmTarget)
-  document.body.removeEventListener('keydown', handleKeydown)
+  document.body.removeEventListener('keydown', handleEsc)
+  if(hoverEl) {
+    hoverEl.classList.remove('snap-target')
+    hoverEl = null
+  }
 }
 
 // 鼠标移动
@@ -75,13 +78,10 @@ function handleMousemove(e) {
 // 点击确认选中
 // @ts-ignore
 async function handleConfirmTarget(e) {
-  stopChosing()
-
   if(!hoverEl) {
     shining('未选中目标', 'orange')
     return
   }
-  hoverEl.classList.remove('snap-target')
   // 下载
   loading = true
   await manualDelay(50)
@@ -93,20 +93,13 @@ async function handleConfirmTarget(e) {
     console.error(err)
   }
   loading = false
-  hoverEl = null
+  stopChosing()
 }
 
 // ESC取消选中
-function handleKeydown(e) {
+function handleEsc(e) {
   if(e.keyCode !== 27) return
-  isChosing = false
-  document.body.removeEventListener('mousemove', handleMousemove)
-  document.body.removeEventListener('click', handleConfirmTarget)
-  document.body.removeEventListener('keydown', handleKeydown)
-  if(hoverEl) {
-    hoverEl.classList.remove('snap-target')
-    hoverEl = null
-  }
+  stopChosing()
 }
 
 // 指定DOM元素，下载其内容

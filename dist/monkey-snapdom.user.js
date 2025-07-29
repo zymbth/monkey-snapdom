@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         网页DOM捕获截图
 // @namespace
-// @version      0.0.9
+// @version      0.0.10
 // @author       ymzhao
 // @description  使用SnapDOM实现的网页DOM捕获截图插件
 // @license      MIT
@@ -56,9 +56,7 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
   try {
     const menu_command_id_1 = GM_registerMenuCommand(
       "选中并截图",
-      function(e) {
-        startChosing();
-      },
+      startChosing,
       {
         accessKey: "s",
         autoClose: true,
@@ -71,7 +69,8 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
     document.addEventListener("keydown", function(e) {
       if (e.ctrlKey && e.shiftKey && (e.key === "," || e.key === "<")) {
         e.preventDefault();
-        startChosing();
+        if (isChosing) stopChosing();
+        else startChosing();
       }
     });
   };
@@ -84,14 +83,18 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
     document.body.addEventListener("mousemove", handleMousemove);
     setTimeout(() => {
       document.body.addEventListener("click", handleConfirmTarget);
-      document.body.addEventListener("keydown", handleKeydown);
+      document.body.addEventListener("keydown", handleEsc);
     }, 200);
   }
   function stopChosing() {
     isChosing = false;
     document.body.removeEventListener("mousemove", handleMousemove);
     document.body.removeEventListener("click", handleConfirmTarget);
-    document.body.removeEventListener("keydown", handleKeydown);
+    document.body.removeEventListener("keydown", handleEsc);
+    if (hoverEl) {
+      hoverEl.classList.remove("snap-target");
+      hoverEl = null;
+    }
   }
   function handleMousemove(e) {
     if (!isChosing || !e.target) return;
@@ -100,12 +103,10 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
     hoverEl = e.target;
   }
   async function handleConfirmTarget(e) {
-    stopChosing();
     if (!hoverEl) {
       shining("未选中目标", "orange");
       return;
     }
-    hoverEl.classList.remove("snap-target");
     loading = true;
     await manualDelay(50);
     try {
@@ -116,18 +117,11 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
       console.error(err);
     }
     loading = false;
-    hoverEl = null;
+    stopChosing();
   }
-  function handleKeydown(e) {
+  function handleEsc(e) {
     if (e.keyCode !== 27) return;
-    isChosing = false;
-    document.body.removeEventListener("mousemove", handleMousemove);
-    document.body.removeEventListener("click", handleConfirmTarget);
-    document.body.removeEventListener("keydown", handleKeydown);
-    if (hoverEl) {
-      hoverEl.classList.remove("snap-target");
-      hoverEl = null;
-    }
+    stopChosing();
   }
   async function execSnapDom(targetEl) {
     if (!snapdom) {
