@@ -82,18 +82,19 @@ async function handleConfirmTarget(e) {
     shining('未选中目标', 'orange')
     return
   }
+  const tmpEl = hoverEl
+  stopChosing()
   // 下载
   loading = true
   await manualDelay(50)
   try {
-    await execSnapDom(hoverEl)
+    await execSnapDom(tmpEl)
     shining('下载成功')
   } catch(err) {
     shining('下载失败', 'red')
     console.error(err)
   }
   loading = false
-  stopChosing()
 }
 
 // ESC取消选中

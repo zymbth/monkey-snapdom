@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         网页DOM捕获截图
 // @namespace
-// @version      0.0.10
+// @version      0.0.11
 // @author       ymzhao
 // @description  使用SnapDOM实现的网页DOM捕获截图插件
 // @license      MIT
@@ -107,17 +107,18 @@ GM_addStyle(" .snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green
       shining("未选中目标", "orange");
       return;
     }
+    const tmpEl = hoverEl;
+    stopChosing();
     loading = true;
     await manualDelay(50);
     try {
-      await execSnapDom(hoverEl);
+      await execSnapDom(tmpEl);
       shining("下载成功");
     } catch (err) {
       shining("下载失败", "red");
       console.error(err);
     }
     loading = false;
-    stopChosing();
   }
   function handleEsc(e) {
     if (e.keyCode !== 27) return;
