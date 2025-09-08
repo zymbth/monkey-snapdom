@@ -42,7 +42,7 @@ try {
       title: '点击后，可选中网页元素以截图'
     }
   )
-} catch (error) {}
+} catch {}
 
 // 监听全局快捷键: Ctrl+Shift+,
 window.onload = function () {

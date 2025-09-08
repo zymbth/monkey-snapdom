@@ -1,18 +1,27 @@
 <script setup>
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 import { manualDelay, shining } from './utils.js'
 
 let hoverEl = null
-let isChosing = false
-let loading = false
+const isChosing = ref(false)
+const loading = ref(false)
+
+let currSnapdom = window.snapdom
+if(process.env.NODE_ENV === 'development') {
+  try {
+    import('@zumer/snapdom').then(module => {
+      currSnapdom = module.snapdom
+    })
+  } catch {}
+}
 
 // 开启功能
 function startChosing() {
-  if(isChosing || loading) {
+  if(isChosing.value || loading.value) {
     console.warn('正在选中，已重新开始')
     stopChosing()
   }
-  isChosing = true
+  isChosing.value = true
   document.body.addEventListener('mousemove', handleMousemove)
   setTimeout(() => {
     document.body.addEventListener('click', handleConfirmTarget)
@@ -22,7 +31,7 @@ function startChosing() {
 
 // 关闭功能
 function stopChosing() {
-  isChosing = false
+  isChosing.value = false
   document.body.removeEventListener('mousemove', handleMousemove)
   document.body.removeEventListener('click', handleConfirmTarget)
   document.body.removeEventListener('keydown', handleEsc)
@@ -34,7 +43,7 @@ function stopChosing() {
 
 // 鼠标移动
 function handleMousemove(e) {
-  if(!isChosing || !e.target) return
+  if(!isChosing.value || !e.target) return
   if(hoverEl) hoverEl.classList.remove('snap-target')
   e.target.classList.add('snap-target')
   hoverEl = e.target
@@ -47,18 +56,19 @@ async function handleConfirmTarget(e) {
     shining('未选中目标', 'orange')
     return
   }
+  const tmpEl = hoverEl
+  stopChosing()
   // 下载
-  loading = true
+  loading.value = true
   await manualDelay(50)
   try {
-    await execSnapDom(hoverEl)
+    await execSnapDom(tmpEl)
     shining('下载成功')
   } catch(err) {
     shining('下载失败', 'red')
     console.error(err)
   }
-  loading = false
-  stopChosing()
+  loading.value = false
 }
 
 // ESC取消选中
@@ -70,7 +80,7 @@ function handleEsc(e) {
 // 指定DOM元素，下载其内容
 async function execSnapDom(targetEl) {
   // @ts-ignore
-  if(!snapdom) {
+  if(!currSnapdom) {
     console.error('未加载插件snapdom')
     return
   }
@@ -80,7 +90,7 @@ async function execSnapDom(targetEl) {
   }
   console.time('捕获耗时：')
   // @ts-ignore
-  const capture = await snapdom(targetEl, {
+  const capture = await currSnapdom(targetEl, {
     embedFonts: true,
     compress: true
   })
@@ -101,7 +111,7 @@ instance.appContext.config.globalProperties.$stopChosing = stopChosing
 </script>
 
 <template>
-  <div id="snap-app">TEST</div>
+  <div id="snap-app">截</div>
 </template>
 
 <style scoped>
