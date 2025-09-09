@@ -6,7 +6,6 @@ const isChosing = ref(false)
 const loading = ref(false)
 
 const snapdomUtil = new SnapdomUtil(isChosing, loading)
-console.log('snapdomUtil: ', snapdomUtil)
 
 // 暴露给全局
 const instance = getCurrentInstance()
@@ -15,7 +14,7 @@ instance.appContext.config.globalProperties.$stopChosing = () => snapdomUtil.sto
 
 
 function onCustomSnap() {
-  snapdomUtil.stopChosing()
+  snapdomUtil.startChosing()
 }
 </script>
 
