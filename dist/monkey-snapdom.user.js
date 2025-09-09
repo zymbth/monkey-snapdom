@@ -8,13 +8,14 @@
 // @include      *
 // @match        *
 // @require      https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js
+// @grant        GM_addStyle
 // @grant        GM_registerMenuCommand
 // ==/UserScript==
 
 (function () {
   'use strict';
 
-  const e=new Set;const importCSS = async t=>{e.has(t)||(e.add(t),(n=>`GM_addStyle(${JSON.stringify(n)});`)(t));};
+  const d=new Set;const importCSS = async e=>{d.has(e)||(d.add(e),(t=>{typeof GM_addStyle=="function"?GM_addStyle(t):document.head.appendChild(document.createElement("style")).append(t);})(e));};
 
   const indexCss = ".snap-target{box-shadow:inset 0 0 4px 2px green,0 0 10px 4px green!important}";
   importCSS(indexCss);
