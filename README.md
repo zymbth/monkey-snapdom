@@ -29,7 +29,7 @@
 
 ### 演示
 
-![实例](/demo-snapdom.gif)
+![[演示](https://github.com/zymbth/monkey-snapdom/blob/master/demo-snapdom.gif)](/demo-snapdom.gif)
 
 ## 问题
 
