@@ -11,8 +11,8 @@ export default defineConfig({
     monkey({
       entry: 'src/main.js',
       userscript: {
-        name: '网页DOM捕获截图',
-        namespace: '',
+        name: '网页内容选择截图',
+        // namespace: '',
         match: ['*'],
         include: ['*'],
         require: ['https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js'],
