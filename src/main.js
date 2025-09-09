@@ -10,10 +10,9 @@ import SnapdomUtil from './utils/SnapdomUtil.js'
  */
 
 // @ts-ignore
-const TIMEOUT = 1000 * 60
+// const TIMEOUT = 1000 * 60
 
 const snapdomUtil = new SnapdomUtil()
-console.log('snapdomUtil: ', snapdomUtil);
 
 try {
   // 菜单

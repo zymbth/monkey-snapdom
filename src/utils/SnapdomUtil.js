@@ -1,4 +1,4 @@
-import { manualDelay, shining } from '../utils.js'
+import { manualDelay, shining } from './index.js'
 
 export default class SnapdomUtil {
   // 构造函数
@@ -20,7 +20,6 @@ export default class SnapdomUtil {
         tmp = await import('@zumer/snapdom').then(module => module.snapdom)
       } catch { }
     }
-    console.log('tmp: ', tmp)
     this._snapdom = tmp
   }
 
