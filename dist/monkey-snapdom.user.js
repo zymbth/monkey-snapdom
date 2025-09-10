@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         网页内容选择截图
-// @version      0.0.13
+// @version      0.0.15
 // @author       ymzhao
 // @description  基于SnapDOM插件实现的网页内容选取截图脚本
 // @license      MIT
